@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BotMan.Work | Dark Animated Chatbot</title>
+    <style>
+        /* === Dark Theme Variables === */
+        :root {
+            --bg-dark: #0f0f1a;
+            --bg-darker: #070710;
+            --primary: #7a4bff;
+            --secondary: #00e0ff;
+            --accent: #ff36a7;
+            --text: #e0e0ff;
+            --text-muted: #a0a0c0;
+        }
+
+        /* === Base Styles === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === Floating Animations === */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(-15px) rotate(-5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* === Animated Background Elements === */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            z-index: -1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            bottom: 10%;
+            right: 5%;
+            animation-delay: 2s;
+            animation-name: float2;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--secondary);
+            top: 60%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        /* === Glowing Text === */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(122, 75, 255, 0.5);
+            animation: pulse 3s ease infinite;
+        }
+
+        /* === Chat Bubble Animation === */
+        @keyframes chatBubble {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .chat-bubble {
+            animation: chatBubble 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+            transform-origin: bottom left;
+            opacity: 0;
+        }
+
+        .chat-bubble:nth-child(1) { animation-delay: 0.3s; }
+        .chat-bubble:nth-child(2) { animation-delay: 0.6s; }
+        .chat-bubble:nth-child(3) { animation-delay: 0.9s; }
+
+        /* === Dark/Light Toggle === */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--bg-darker);
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid var(--primary);
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            top: 1px;
+            left: 2px;
+            transition: 0.4s;
+        }
+
+        #theme-switch:checked + .theme-toggle::before {
+            transform: translateX(28px);
+            background: var(--secondary);
+        }
+
+        /* === Main Content === */
+        .container {
+            max-width: 1400px; /* Wider container */
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            min-height: 70vh;
+            gap: 80px; /* Space between text and chat demo */
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-right: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 20px rgba(122, 75, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(122, 75, 255, 0.6);
+        }
+
+        .btn-secondary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chat-demo {
+            flex: 1;
+            position: relative;
+            height: 500px;
+            min-width: 400px;
+        }
+
+        .chat-window {
+            background: rgba(15, 15, 26, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(122, 75, 255, 0.2);
+            width: 350px;
+            height: 450px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--bg-darker));
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .chat-body {
+            padding: 1.5rem;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            max-width: 80%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .bot-message {
+            background: linear-gradient(45deg, var(--primary), #5a2ddf);
+            color: white;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background: var(--bg-darker);
+            border: 1px solid rgba(122, 75, 255, 0.3);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        /* === New Contact Section === */
+        .contact-section {
+            text-align: center;
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .contact-section p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .email-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, var(--accent), #ff1a75);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(255, 54, 167, 0.4);
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(255, 54, 167, 0.6);
+        }
+
+        /* === Email Form === */
+        #email-form {
+            display: none;
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            margin: 2rem auto;
+            border: 1px solid rgba(122, 75, 255, 0.3);
+        }
+
+        #email-form.visible {
+            display: block;
+            animation: chatBubble 0.6s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--bg-darker);
+            border: 1px solid rgba(122, 75, 255, 0.3);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        #thank-you-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        #thank-you-message.visible {
+            display: block;
+            animation: chatBubble 0.6s ease-out;
+        }
+
+        /* === Footer === */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            background: var(--bg-darker);
+            border-top: 1px solid rgba(122, 75, 255, 0.1);
+        }
+
+        .footer-content {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* === Hidden Checkbox for Theme Toggle === */
+        #theme-switch {
+            display: none;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Animated Background Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="container">
+        <header>
+            <a href="#" class="logo">BotMan.Work</a>
+            <div>
+                <input type="checkbox" id="theme-switch">
+                <label for="theme-switch" class="theme-toggle"></label>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="glow-text">Build <span style="color: var(--secondary)">Animated</span> AI Chatbots</h1>
+                <p>Create stunning conversational experiences with our dark-themed, animation-rich chatbot platform that captivates users.</p>
+                <!-- <div>
+                    <a href="#" class="btn btn-primary">Get Started</a>
+                    <a href="#" class="btn btn-secondary">View Demo</a>
+                </div> -->
+            </div>
+
+            <div class="chat-demo">
+                <div class="chat-window">
+                    <div class="chat-header">
+                        <div class="chat-icon">
+                            <i class="fas fa-robot" style="color: white;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">BotMan.Work</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted)">Online</div>
+                        </div>
+                    </div>
+                    <div class="chat-body">
+                        <div class="message bot-message chat-bubble">
+                            Hello! I'm your animated AI assistant. How can I help?
+                        </div>
+                        <div class="message user-message chat-bubble">
+                            Show me some cool animations!
+                        </div>
+                        <div class="message bot-message chat-bubble">
+                            Watch this! ✨<br>
+                            <div style="margin-top: 10px;">
+                                <div style="width: 20px; height: 20px; background: var(--secondary); border-radius: 50%; display: inline-block; animation: float 2s infinite ease-in-out;"></div>
+                                <div style="width: 20px; height: 20px; background: var(--accent); border-radius: 50%; display: inline-block; animation: float 2s infinite ease-in-out 0.5s; margin-left: 10px;"></div>
+                                <div style="width: 20px; height: 20px; background: var(--primary); border-radius: 50%; display: inline-block; animation: float 2s infinite ease-in-out 1s; margin-left: 10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Contact Section -->
+        <section class="contact-section">
+            <div class="contact-content">
+                <h2>Let's Build Together</h2>
+                <p>Contact us today to integrate BotMan.Work with your platform and offer smarter user experiences.</p>
+                <button id="show-form-btn" class="email-btn">
+                    <i class="fas fa-envelope" style="margin-right: 8px;"></i>Email Us
+                </button>
+                
+                <!-- Email Form (initially hidden) -->
+                <form id="email-form" onsubmit="event.preventDefault(); showThankYou()">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+                    <button type="submit" class="email-btn">
+                        <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Send Message
+                    </button>
+                </form>
+                
+                <!-- Thank You Message (initially hidden) -->
+                <div id="thank-you-message">
+                    <h3 style="color: var(--secondary); margin-bottom: 1rem;">Thank You!</h3>
+                    <p>We've received your message and will get back to you soon.</p>
+                    <button onclick="location.reload()" class="btn-secondary" style="margin-top: 1rem;">
+                        <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>Back to Home
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                © 2025 BotMan.Work. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Show email form when button clicked
+        document.getElementById('show-form-btn').addEventListener('click', function() {
+            document.getElementById('email-form').classList.add('visible');
+            this.style.display = 'none';
+        });
+        
+        // Show thank you message after form submission
+        function showThankYou() {
+            document.getElementById('email-form').classList.remove('visible');
+            document.getElementById('thank-you-message').classList.add('visible');
+        }
+    </script>
+</body>
+</html>
